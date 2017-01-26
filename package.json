@@ -1,6 +1,6 @@
 {
   "name": "px-to-csv",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Convert PC-Axis files to CSV",
   "main": "index.js",
   "bin": {
