@@ -1,0 +1,35 @@
+{
+  "name": "px-to-csv",
+  "version": "1.0.0",
+  "description": "Convert PC-Axis files to CSV",
+  "main": "index.js",
+  "bin": {
+    "px-to-csv": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lukasmartinelli/px-to-csv.git"
+  },
+  "engines": {
+    "node": ">=4.7"
+  },
+  "keywords": [
+    "pc-axis",
+    "px",
+    "csv"
+  ],
+  "author": "Lukas Martinelli",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/lukasmartinelli/px-to-csv/issues"
+  },
+  "homepage": "https://github.com/lukasmartinelli/px-to-csv#readme",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "csv-write-stream": "^2.0.0",
+    "px": "^0.1.2"
+  }
+}
