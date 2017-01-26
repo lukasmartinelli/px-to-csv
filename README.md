@@ -7,18 +7,18 @@ as a flat row. [What the heck is a PC-Axis file?](https://exversiondata.wordpres
 
 First install the required dependencies. You need a new Node version (`> 4.7`).
 
-``bash
+```bash
 npm install -g px-to-csv
-``
+```
 
 Now download a PC Axis file from your statistical data provider.
 
-``bash
-wget https://www.pxweb.bfs.admin.ch/DownloadFile.aspx?file=px-x-0102020000_402
+```bash
+wget -O households.px https://www.pxweb.bfs.admin.ch/DownloadFile.aspx?file=px-x-0102020000_402
 ```
 
 Invoke the `index.js` file with the PX file and specify the output CSV file.
 
-``bash
-px-to-csv -i myfile.px -o myfile.csv
+```bash
+px-to-csv -i households.px -o households.csv
 ```
