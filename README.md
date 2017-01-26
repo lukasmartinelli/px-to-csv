@@ -1,4 +1,4 @@
-# Convert PC-Axis to CSV
+# Convert PC-Axis to CSV [![Build Status](https://travis-ci.org/lukasmartinelli/px-to-csv.svg?branch=master)](https://travis-ci.org/lukasmartinelli/px-to-csv)
 
 Convert PC-Axis files to CSV files. This will store all the dimensions inside the PC-Axis cube
 as a flat row. [What the heck is a PC-Axis file?](https://exversiondata.wordpress.com/2014/06/17/obscure-data-formats-px-files/)
