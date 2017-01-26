@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - "6"
+  - "5"
+  - "4"
+before_install:
+  - wget 0102020000_402.px https://www.pxweb.bfs.admin.ch/DownloadFile.aspx?file=px-x-0102020000_402
+script:
+  - node index.js -i 0102020000_402.px -o households.csv
+

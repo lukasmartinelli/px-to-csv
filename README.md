@@ -15,7 +15,7 @@ Now download a PC Axis file from your statistical data provider.
 
 ``bash
 wget https://www.pxweb.bfs.admin.ch/DownloadFile.aspx?file=px-x-0102020000_402
-``
+```
 
 Invoke the `index.js` file with the PX file and specify the output CSV file.
 
