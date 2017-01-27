@@ -9,63 +9,48 @@ const program = require('commander');
 program
   .option('-o, --csv-file <f>', 'CSV target file')
   .option('-i, --px-file <f>', 'PC Axis source file')
+  .option('-c, --datum-column <f>', 'Assign custom header name to the datum column')
   .parse(process.argv);
 
-function* datumIndizes(valCounts) {
-  //NOTE: This seems crazy at first - but by unrolling we avoid the recursion and we have
-  //a fixed amount of dimensions anyway
-  const dimension = valCounts.length;
-  const indizes = [];
 
-  for(var i = 0; i < valCounts[0]; i++) {
-    if(dimension === 1) {
-      yield [i];
-    }
-
-    for(var j = 0; j < valCounts[1]; j++) {
-      if(dimension === 2) {
-        yield [i, j];
-        continue;
-      }
-      for(var k = 0; k < valCounts[2]; k++) {
-        if(dimension === 3) {
-          yield [i, j, k];
-          continue;
-        }
-        for(var l = 0; l < valCounts[3]; l++) {
-          if(dimension === 4) {
-            yield [i, j, k, l];
-            continue;
-          }
-          for(var m = 0; m < valCounts[4]; m++) {
-            if(dimension === 5) {
-              yield [i, j, k, l, m];
-              continue;
-            }
-            for(var n = 0; n < valCounts[5]; n++) {
-              if(dimension === 6) {
-                yield [i, j, k , l, m, n];
-                continue;
-              } else {
-                throw "Only at max 6 dimensions supported";
-              }
-            }
-          }
-        }
-      }
-    }
+function _arrayOfZeroes(l) {
+  var a = [];
+  while (l--) {
+    a[l] = 0;
   }
-
-  return indizes;
+  return a;
 }
 
-function* allDatums(px) {
-  const counts = px.valCounts()
-  const indizes = datumIndizes(counts);
-  for(var index of indizes) {
-    yield index.map((valueIdx, variableIdx) => {
-      return px.values(variableIdx)[valueIdx];
-    }).concat([px.datum(index)]);
+// A generator port of the .entries function of px
+function* datums(px, datumFieldName) {
+  const counts = px.valCounts();
+  const vars = px.variables();
+  const valIdx = _arrayOfZeroes(counts.length);
+  const last = valIdx.length - 1;
+  const multipliers = [];
+
+  for (var i = 0, l = counts.length; i < l - 1; i++) {
+      // the multiplier for each variable is the product of the numbers of values
+      // for each variable occuring after it in the variables array
+      multipliers[i] = counts.slice(i + 1).reduce((a, b) => a * b);
+  }
+
+  for (var i = 0; i < px.data.length; i++) {
+    const d = px.data[i];
+    const datum = {};
+    datum[datumFieldName || 'num'] = d;
+    for (var di = 0, dl = vars.length; di < dl; di++) {
+      datum[vars[di]] = px.values(di)[valIdx[di]];
+    }
+    yield datum
+
+    // increment indices:
+    for (var mi = 0, ml = multipliers.length; mi < ml; mi++) {
+      if ( (i + 1) % (multipliers[mi]) === 0 ) {
+        valIdx[mi] = valIdx[mi] === counts[mi] - 1 ? 0 : valIdx[mi] + 1;
+      }
+    }
+    valIdx[last] = valIdx[last] === counts[last] - 1 ? 0 : valIdx[last] + 1;
   }
 }
 
@@ -73,14 +58,11 @@ if(program.pxFile && program.csvFile) {
   const outputStream = fs.createWriteStream(program.csvFile);
   fs.readFile(program.pxFile, 'utf8', function(err, data) {
     if(err) throw err;
-
     const px = new Px(data);
-    const vars = px.variables();
-    const writer = csvWriter({
-      headers: vars.concat(['Datum'])
-    })
+    const writer = csvWriter()
+
     writer.pipe(outputStream);
-    for(var datum of allDatums(px)) {
+    for(var datum of datums(px, program.datumColumn)) {
       writer.write(datum)
     }
     writer.end();

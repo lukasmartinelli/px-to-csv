@@ -1,6 +1,6 @@
 {
   "name": "px-to-csv",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Convert PC-Axis files to CSV",
   "main": "index.js",
   "bin": {
@@ -30,6 +30,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "csv-write-stream": "^2.0.0",
+    "iconv-lite": "^0.4.15",
     "px": "^0.1.2"
   }
 }
