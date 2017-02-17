@@ -22,3 +22,9 @@ Invoke the `index.js` file with the PX file and specify the output CSV file.
 ```bash
 px-to-csv -i households.px -o households.csv
 ```
+
+:warning: Convert the PX files to UTF-8 first!
+
+```
+iconv -f WINDOWS-1252 -t UTF-8  households.px
+```
